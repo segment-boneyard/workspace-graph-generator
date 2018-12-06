@@ -1,6 +1,9 @@
 import requests
 import os
 
+'''
+    A super simple Platform API client. Error handling not included.
+'''
 class Client():
 
     URL = 'https://platform.segmentapis.com/v1beta/'
@@ -41,11 +44,14 @@ class Client():
     Clean the name of one of our nodes
 '''
 def clean_node(name):
-    chars = ' ./-'
+    chars = ' ./-[]()'
     for char in chars:
         name = name.replace(char, '_')
     return name
 
+'''
+    A very simple graph
+'''
 class Graph():
 
     def __init__(self, workspace):
@@ -62,7 +68,7 @@ class Graph():
         self.edges.add(tup)
 
     def render(self):
-        print('graph ' + self.workspace + ' {')
+        print('graph ' + clean_node(self.workspace) + ' {')
         for edge in self.edges:
             print('  ' + ' -- '.join(edge))
         for node in self.nodes:
@@ -78,8 +84,9 @@ if __name__ == '__main__':
     client = Client(user, password, workspace)
     graph = Graph(workspace)
     sources = client.get_sources()
+    # for some reason it seems to error on large workspaces
     for source in sources[:40]:
-        name = clean_node(source['name'].split('/')[-1])
+        name = clean_node(source['display_name'])
         destinations = client.get_destinations(source)
         graph.add_node(clean_node(name))
         
