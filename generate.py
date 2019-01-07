@@ -15,8 +15,8 @@ class Client():
 
         token_payload = {
             "access_token": {
-                "description": "my access token", 
-                "scopes": "workspace", 
+                "description": "workspace-graph-generator",
+                "scopes": "workspace:read",
                 "workspace_names": ['workspaces/' + workspace]
             }
         }
